@@ -54,7 +54,6 @@ app.get('/:model', async (req, res) => {
       return res.status(404).send()
     }
     if (!documentId && !Object.keys(documentFilters).length) { // Model.find()
-      console.log('o id é', documentId, 'e filtros são', documentFilters)
       const results = await model.find()
       return res.send(results)
     }
