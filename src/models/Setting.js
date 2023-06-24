@@ -1,9 +1,10 @@
+const uniqid = require('uniqid')
 const mongoose = require('../config/db')
 
 const SettingsSchema = new mongoose.Schema({
   id: {
     type: String,
-    default() {
+    default () {
       return uniqid('setting-')
     }
   },

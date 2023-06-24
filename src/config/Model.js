@@ -3,12 +3,12 @@ const Model = (model) => {
     const result = await model.create(props)
     return result
   }
-  
-  const find = async (params = { filters: {}, sort: {}, showId: false}) => {
+
+  const find = async (params = { filters: {}, sort: {}, showId: false }) => {
     const result = await model.find(params.filters).sort(params.sort)
     let items = result
     if (!params.showId) {
-      items = result.map(item => {
+      items = result.map((item) => {
         item._id = undefined
         return item
       })
@@ -34,7 +34,6 @@ const Model = (model) => {
     return result
   }
 
-
   const findOne = async (filter = {}) => {
     const result = await model.findOne(filter)
     return result
@@ -49,7 +48,9 @@ const Model = (model) => {
     return result
   }
 
-  return { create, find, findById, findByIdAndUpdate, findByIdAndDelete, findOne, findOneAndUpdate, findOneAndDelete }
+  return {
+    create, find, findById, findByIdAndUpdate, findByIdAndDelete, findOne, findOneAndUpdate, findOneAndDelete
+  }
 }
 
 module.exports = Model

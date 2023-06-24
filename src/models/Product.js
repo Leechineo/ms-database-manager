@@ -48,7 +48,7 @@ const ProductSchema = new mongoose.Schema({
   }
 })
 
-ProductSchema.pre('save', async function(next) {
+ProductSchema.pre('save', async function (next) {
   if (!this.isNew) {
     return next()
   }

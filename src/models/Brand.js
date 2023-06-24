@@ -1,5 +1,5 @@
-const mongoose = require('../config/db')
 const uniqid = require('uniqid')
+const mongoose = require('../config/db')
 
 const BrandSchema = new mongoose.Schema({
   id: {
@@ -25,8 +25,8 @@ const BrandSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
+})
 
-const Brand = mongoose.model('brands', BrandSchema);
+const Brand = mongoose.model('brands', BrandSchema)
 
-module.exports = Brand;
+module.exports = Brand

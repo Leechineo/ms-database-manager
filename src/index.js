@@ -4,6 +4,7 @@ const express = require('express')
 const fs = require('fs')
 const path = require('path')
 const Model = require('./config/Model')
+const auth = require('./middlewares/auth')
 
 const app = express()
 
@@ -18,6 +19,7 @@ const models = modelsFiles.reduce((acc, file) => {
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(auth())
 
 app.post('/:model', async (req, res) => {
   const data = req.body
@@ -61,17 +63,15 @@ app.get('/:model', async (req, res) => {
       const result = await model.findById(documentId)
       if (!result) {
         return res.status(404).send()
-      } else {
-        return res.send(result)
       }
+      return res.send(result)
     }
     if (Object.keys(documentFilters).length) { // Model.findOne()
       const result = await model.findOne(documentFilters)
       if (!result) {
         return res.status(404).send()
-      } else {
-        return res.send(result)
       }
+      return res.send(result)
     }
     return res.send(req.params.model)
   } catch (e) {
@@ -101,10 +101,9 @@ app.patch('/:model', async (req, res) => {
     if (documentId) {
       const result = await model.findByIdAndUpdate(documentId, data)
       return res.send(result)
-    } else {
-      const result = await model.findOneAndUpdate(documentFilters, data)
-      return res.send(result)
     }
+    const result = await model.findOneAndUpdate(documentFilters, data)
+    return res.send(result)
   } catch (e) {
     return res.status(500).send()
   }
@@ -130,10 +129,9 @@ app.delete('/:model', async (req, res) => {
     if (documentId) {
       const result = await model.findByIdAndDelete(documentId)
       return res.send(result)
-    } else {
-      const result = await model.findOneAndDelete(documentFilters)
-      return res.send(result)
     }
+    const result = await model.findOneAndDelete(documentFilters)
+    return res.send(result)
   } catch (e) {
     return res.status(500).send()
   }

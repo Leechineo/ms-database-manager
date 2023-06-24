@@ -1,5 +1,5 @@
-const mongoose = require('../config/db')
 const uniqid = require('uniqid')
+const mongoose = require('../config/db')
 
 const StockSchema = new mongoose.Schema({
   id: {
