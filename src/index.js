@@ -61,16 +61,10 @@ app.get('/:model', async (req, res) => {
     }
     if (documentId) { // Model.findById()
       const result = await model.findById(documentId)
-      if (!result) {
-        return res.status(404).send()
-      }
       return res.send(result)
     }
     if (Object.keys(documentFilters).length) { // Model.findOne()
       const result = await model.findOne(documentFilters)
-      if (!result) {
-        return res.status(404).send()
-      }
       return res.send(result)
     }
     return res.send(req.params.model)
