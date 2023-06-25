@@ -3,9 +3,9 @@ const cors = require('cors')
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const Leechineo = require('leechineo-backend-plugin')
 const Model = require('./config/Model')
 const auth = require('./middlewares/auth')
-const Leechineo = require('leechineo-backend-plugin')
 
 const app = express()
 
@@ -43,7 +43,7 @@ app.post('/:model', async (req, res) => {
 app.get('/:model', async (req, res) => {
   const documentId = req.query.id
   const documentFilters = Leechineo.plugins.isStringParsableToObj(req.query.filters) ? JSON.parse(req.query.filters) : {}
-  let paginator = Leechineo.plugins.isStringParsableToObj(req.query.paginator) ? JSON.parse(req.query.paginator) : {}
+  const paginator = Leechineo.plugins.isStringParsableToObj(req.query.paginator) ? JSON.parse(req.query.paginator) : {}
 
   try {
     if (!req.params.model) {
@@ -57,9 +57,11 @@ app.get('/:model', async (req, res) => {
       const filters = Leechineo.plugins.isStringParsableToObj(paginator.filters) ? JSON.parse(paginator.filters) : {}
       const sort = Leechineo.plugins.isStringParsableToObj(paginator.sort) ? JSON.parse(paginator.sort) : {}
       const search = Leechineo.plugins.isStringParsableToObj(paginator.search) ? JSON.parse(paginator.search) : {}
-      const limit = paginator.limit
-      const page = paginator.page
-      const results = await model.paginate({ filters, limit, page, sort, search })
+      const { limit } = paginator
+      const { page } = paginator
+      const results = await model.paginate({
+        filters, limit, page, sort, search
+      })
       return res.send(results)
     }
     if (!documentId && !Object.keys(documentFilters).length) { // Model.find()

@@ -48,7 +48,9 @@ const Model = (model) => {
     return result
   }
 
-  const paginate = async ({ filters, limit, page, sort = { createdAt: 'desc' }, search }) => {
+  const paginate = async ({
+    filters, limit, page, sort = { createdAt: 'desc' }, search
+  }) => {
     const startIndex = (page - 1) * limit
     const result = {}
     const searchObj = {}
@@ -63,7 +65,7 @@ const Model = (model) => {
           total: 0
         }
       }
-      result.items = await model.find({...filters, ...searchObj}).limit(limit).skip(startIndex).sort(sort)
+      result.items = await model.find({ ...filters, ...searchObj }).limit(limit).skip(startIndex).sort(sort)
       result.total = docsLength
       return result
     } catch (e) {
