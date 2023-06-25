@@ -26,7 +26,7 @@ const Model = (model) => {
   }
 
   const findByIdAndUpdate = async (id, props) => {
-    const result = await model.findByIdAndUpdate(id, props)
+    const result = await model.findByIdAndUpdate(id, props, { new: true })
     return result
   }
   const findByIdAndDelete = async (id) => {
@@ -40,7 +40,7 @@ const Model = (model) => {
   }
 
   const findOneAndUpdate = async (filter, params) => {
-    const result = await model.findOneAndUpdate(filter, params)
+    const result = await model.findOneAndUpdate(filter, params, { new: true })
     return result
   }
   const findOneAndDelete = async (id) => {
