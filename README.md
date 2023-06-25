@@ -117,4 +117,4 @@ POST /Brand?id=64964f5522c513c0b4fa3266
 
 ## License
 
-This project is licensed under the [MIT License](/LICENSE)
+This project is licensed under the [GPL 3.0 License](/LICENSE)
