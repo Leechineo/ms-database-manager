@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const Model = require('./config/Model')
 const auth = require('./middlewares/auth')
+const Leechineo = require('leechineo-backend-plugin')
 
 const app = express()
 
@@ -34,18 +35,15 @@ app.post('/:model', async (req, res) => {
     const result = await model.create(data)
     return res.send(result)
   } catch (e) {
+    console.log(e)
     return res.status(500).send()
   }
 })
 
 app.get('/:model', async (req, res) => {
   const documentId = req.query.id
-  let documentFilters
-  try {
-    documentFilters = JSON.parse(req.query.filters)
-  } catch (e) {
-    documentFilters = {}
-  }
+  const documentFilters = Leechineo.plugins.isStringParsableToObj(req.query.filters) ? JSON.parse(req.query.filters) : {}
+  let paginator = Leechineo.plugins.isStringParsableToObj(req.query.paginator) ? JSON.parse(req.query.paginator) : {}
 
   try {
     if (!req.params.model) {
@@ -54,6 +52,15 @@ app.get('/:model', async (req, res) => {
     const model = Model(models[req.params.model])
     if (!model) {
       return res.status(404).send()
+    }
+    if (Object.keys(paginator).length) {
+      const filters = Leechineo.plugins.isStringParsableToObj(paginator.filters) ? JSON.parse(paginator.filters) : {}
+      const sort = Leechineo.plugins.isStringParsableToObj(paginator.sort) ? JSON.parse(paginator.sort) : {}
+      const search = Leechineo.plugins.isStringParsableToObj(paginator.search) ? JSON.parse(paginator.search) : {}
+      const limit = paginator.limit
+      const page = paginator.page
+      const results = await model.paginate({ filters, limit, page, sort, search })
+      return res.send(results)
     }
     if (!documentId && !Object.keys(documentFilters).length) { // Model.find()
       const results = await model.find()
@@ -99,6 +106,7 @@ app.patch('/:model', async (req, res) => {
     const result = await model.findOneAndUpdate(documentFilters, data)
     return res.send(result)
   } catch (e) {
+    console.log(e)
     return res.status(500).send()
   }
 })
@@ -127,6 +135,7 @@ app.delete('/:model', async (req, res) => {
     const result = await model.findOneAndDelete(documentFilters)
     return res.send(result)
   } catch (e) {
+    console.log(e)
     return res.status(500).send()
   }
 })
