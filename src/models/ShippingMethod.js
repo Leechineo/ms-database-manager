@@ -1,6 +1,13 @@
+const uniqid = require('uniqid')
 const mongoose = require('../config/db')
 
 const ShippingMethodSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    default () {
+      return uniqid('shippin_method-')
+    }
+  },
   name: {
     required: true,
     type: String
