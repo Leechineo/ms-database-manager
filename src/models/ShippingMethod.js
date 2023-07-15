@@ -5,12 +5,15 @@ const ShippingMethodSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  mappings: {
-    type: Array
-  },
   defaultMapping: {
     type: Object,
     required: true
+  },
+  mappings: {
+    type: Array
+  },
+  products: {
+    type: Array
   },
   createdAt: {
     type: Date,
